@@ -2,3 +2,7 @@
 # Importem les dades de les persones 
 LOAD CSV WITH HEADERS FROM 'file:/Dades/INDIVIDUAL.csv' AS row
 CREATE (:PERSON {Id: toInteger(row.Id), Year: toInteger(row.Year), Name: row.name, Surname: row.surname, Second_Surname: row.second_surname })
+
+# Importem les dades de l'habitatge
+LOAD CSV WITH HEADERS FROM 'file:/Dades/HABITATGES.csv' AS row
+CREATE (:HABITATGE {Municipi: row.Municipi, Id_Llar: toInteger(row.Id_Llar), Year_Padro: toInteger(row.Any_Padro), Carrer: row.Carrer, Numero: toInteger(row.Numero)})
