@@ -16,5 +16,14 @@ MERGE (p:PERSON {Id: row.IND})
 MERGE (h:HABITATGE {Municipi:row.Location, Year_Padro: row.Year, Id_Llar: row.HOUSE_ID})
 MERGE (p)-[:VIU]->(h)
 
-#Creem la relació Família entre les diferents persones
+# Creem la relació SAME_AS entre les diferents persones
+LOAD CSV WITH HEADERS FROM 'file:/Dades/SAME_AS.csv' AS row 
+MERGE (p:PERSON {Id: toInteger(row.Id_A)})
+MERGE (q:PERSON {Id: toInteger(row.Id_B)})
+MERGE (p)-[:SAME_AS]->(q)
 
+# Creem la relació FAMILIA amb les seves propietats entre les diferents persones
+LOAD CSV WITH HEADERS FROM 'file:/Dades/FAMILIA.csv' AS row 
+MERGE (p:PERSON {Id: toInteger(row.ID_1)})
+MERGE (q:PERSON {Id: toInteger(row.ID_2)})
+MERGE (p)-[rel:FAMILIA {Relacio: row.Relacio, Relacio_Harmonitzada: row.Relacio_Harmonitzada}]->(q)
