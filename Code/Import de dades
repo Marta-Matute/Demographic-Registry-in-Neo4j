@@ -6,3 +6,9 @@ CREATE (:PERSON {Id: toInteger(row.Id), Year: toInteger(row.Year), Name: row.nam
 # Importem les dades de l'habitatge
 LOAD CSV WITH HEADERS FROM 'file:/Dades/HABITATGES.csv' AS row
 CREATE (:HABITATGE {Municipi: row.Municipi, Id_Llar: toInteger(row.Id_Llar), Year_Padro: toInteger(row.Any_Padro), Carrer: row.Carrer, Numero: toInteger(row.Numero)})
+
+# Creem la relació VIU entre les persones i l'habitatge
+LOAD CSV WITH HEADERS FROM 'file:/Dades/VIU.csv' AS row
+MERGE (p:PERSON {Id: row.IND})
+MERGE (h:HABITATGE {Municipi:row.Location, Year_Padro: row.Year, Id_Llar: row.HOUSE_ID})
+MERGE (p)-[:VIU]->(h)
