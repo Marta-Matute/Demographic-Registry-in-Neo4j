@@ -1,0 +1,4 @@
+
+# Importem les dades de les persones 
+LOAD CSV WITH HEADERS FROM 'file:/Dades/INDIVIDUAL.csv' AS row
+CREATE (:PERSON {Id: toInteger(row.Id), Year: toInteger(row.Year), Name: row.name, Surname: row.surname, Second_Surname: row.second_surname })
