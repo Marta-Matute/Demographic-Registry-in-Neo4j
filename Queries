@@ -1,0 +1,66 @@
+QUERY 1
+match (h:HABITATGE)<-[:VIU]-(p:PERSONA) where p.Cognom <> 'nan' and h.Any_Padro = 1866 and h.Municipi = "CR" return count(p) as `Num habitants`, collect(distinct p.Cognom) as Llistat
+
+QUERY 2
+match (h:HABITATGE)<-[:VIU]-(p:PERSONA) 
+where h.Any_Padro < 1840 and h.Municipi = "SFLL"
+return distinct h.Any_Padro as Any, collect(DISTINCT h.Id_Llar) as `Llista llars`
+order by h.Any_Padro
+
+QUERY 3
+match (p:PERSONA)-[:VIU]->(h:HABITATGE)<-[:VIU]-(q:PERSONA) where p.Nom = "rafel" and p.Cognom = "marti" return p.Nom as nom, collect(q.Nom) as convivents 
+
+QUERY 4
+match (p:PERSONA)-[:SAME_AS]-(q:PERSONA) where p.Nom = "miguel" and p.Cognom = "ballester" return p,q
+
+QUERY 5
+match (p:PERSONA)-[rel]-(q:PERSONA) where p.Nom = "antonio" and p.Cognom = "farran" return q.Nom as Nom, q.Cognom as Cognom1, q.Segon_Cognom as Cognom2, type(rel) as Tipus
+
+QUERY 6
+match (p:PERSONA)-[r:FAMILIA]-(q:PERSONA) where r.Relacio_Harmonitzada <> 'null' return collect(distinct r.Relacio_Harmonitzada)
+
+QUERY 7
+match (h1:HABITATGE) match (h2:HABITATGE)
+where h1.Carrer = h2.Carrer and h1.Numero = h2.Numero and h1.Id_Llar <> h2.Id_Llar and h1.Municipi = "SFLL" and h2.Municipi = "SFLL" 
+return h1.Carrer as Carrer, h1.Numero as Numero, count(distinct h2) as Total, collect(distinct h2.Any_Padro) as any, collect(DISTINCT h2.Id_Llar) as Ids
+order by Total desc limit 10
+
+QUERY 8
+match (p:PERSONA)-[r:FAMILIA]->(q:PERSONA) 
+where r.Relacio = "fill" or r.Relacio = "filla"
+return p.Nom as nom, p.Cognom as `1er cognom`, p.Segon_Cognom as `2n Cognom`, count(q) as total
+order by total desc
+limit 20
+
+
+QUERY 9
+========== set nombre de fills ==========
+match (p:PERSONA)-[r:FAMILIA]->(q:PERSONA)
+where (r.Relacio_Harmonitzada = "fill" or r.Relacio_Harmonitzada = "filla")
+with p as persona, count(DISTINCT q) as Nombre_fills, collect(p) as nodes
+set persona.Numero_fills = Nombre_fills
+=========================================
+
+// falta nombre d'habitatges, pero es que no se que vol dir
+match (h:HABITATGE)<-[:VIU]-(p:PERSONA)-[r:FAMILIA]->(q:PERSONA)
+where (r.Relacio_Harmonitzada = "fill" or r.Relacio_Harmonitzada = "filla") and p.Any = 1881 and h.Municipi = "SFLL"
+with p as persones, count(distinct q) as nombre_fills
+return sum(nombre_fills), avg(nombre_fills)
+
+
+
+QUERY 10
+
+
+
+
+
+
+
+
+
+
+
+
+
+
