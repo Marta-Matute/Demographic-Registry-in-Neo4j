@@ -52,6 +52,7 @@ QUERY 10
 // de la query 7 no dona com al joc de proves, pero a mes grups els hi dona així, és a dir que podria ser que estigui bé
 // de la query 8 falta posar la condició de que la familia tingui més de 3 fills
 // de la query 9 falta retornar "el nombre d'habitatges", que sincerament, no sé a que es refereix
+// també de la query 9, el tema que al joc de proves surti que la mitja de fills es 217........
 
 
 // mentre feia la query 9 vaig fer una comanda que al final no serveix per res, pero que basicament guarda el nombre de fills per familia en forma de propietat.
