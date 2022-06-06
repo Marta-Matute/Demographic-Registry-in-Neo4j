@@ -47,7 +47,16 @@ where (r.Relacio_Harmonitzada = "fill" or r.Relacio_Harmonitzada = "filla") and 
 with p as persones, count(distinct q) as nombre_fills
 return sum(nombre_fills), avg(nombre_fills)
 
-
+// He posat el nombre d'habitatges, el que no entenc és la mitja de fills
+call{
+    match (l:HABITATGE)
+    where l.Municipi='SFLL' and l.Any_Padro=1881
+    return count(l.Id_Llar) as NumLlars
+}
+match (h:HABITATGE)<-[:VIU]-(p:PERSONA)-[r:FAMILIA]->(q:PERSONA)
+where (r.Relacio_Harmonitzada = "fill" or r.Relacio_Harmonitzada = "filla") and p.Any = 1881 and h.Municipi = "SFLL"
+with p as persones, count(distinct q) as nombre_fills, NumLlars
+return sum(nombre_fills), avg(nombre_fills), NumLlars
 
 QUERY 10
 
