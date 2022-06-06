@@ -32,6 +32,14 @@ return p.Nom as nom, p.Cognom as `1er cognom`, p.Segon_Cognom as `2n Cognom`, co
 order by total desc
 limit 20
 
+// Una altra manera de fer-ho, pero no dona igual que al joc de proves tot i que ara si que s'agafen a partir de 3 fills
+match (h:HABITATGE)<-[:VIU]-(p:PERSONA)-[r:FAMILIA]->(q:PERSONA) 
+where r.Relacio_Harmonitzada='fill' or r.Relacio_Harmonitzada='filla' and h.Municipi = 'CR'
+with p,count(q.Nom) as NumFills
+where NumFills>3
+return p.Nom as Nom, p.Cognom as `1r Cognom`, p.Segon_Cognom as `2n Cognom`, NumFills
+order by NumFills desc limit 20
+
 
 // 9. Mitja de fills a Sant Feliu del Llobregat l’any 1881 per família. Mostreu el total de fills, el nombre d’habitatges i la mitja.
 match (h:HABITATGE)<-[:VIU]-(p:PERSONA)-[r:FAMILIA]->(q:PERSONA)
