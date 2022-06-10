@@ -37,21 +37,32 @@ order by total desc
 limit 20
 
 // 9. Mitja de fills a Sant Feliu del Llobregat l’any 1881 per família. Mostreu el total de fills, el nombre d’habitatges i la mitja.
-match (h:HABITATGE)<-[:VIU]-(p:PERSONA)-[r:FAMILIA]->(q:PERSONA)
-where (r.Relacio_Harmonitzada = "fill" or r.Relacio_Harmonitzada = "filla") and p.Any = 1881 and h.Municipi = "SFLL"
-with p as persones, count(distinct q) as nombre_fills
-return sum(nombre_fills), avg(nombre_fills)
-
-// He posat el nombre d'habitatges, el que no entenc és la mitja de fills
+VERSIÓ 1 (DIFERENT DEL JOC DE PROVES)
 call{
     match (l:HABITATGE)
     where l.Municipi='SFLL' and l.Any_Padro=1881
     return count(l.Id_Llar) as NumLlars
 }
 match (h:HABITATGE)<-[:VIU]-(p:PERSONA)-[r:FAMILIA]->(q:PERSONA)
-where (r.Relacio_Harmonitzada = "fill" or r.Relacio_Harmonitzada = "filla") and p.Any = 1881 and h.Municipi = "SFLL"
+where (r.Relacio_Harmonitzada =~ "f.*" and r.Relacio_Harmonitzada <> "familiar") and p.Any = 1881 and h.Municipi = "SFLL"
 with p as persones, count(distinct q) as nombre_fills, NumLlars
-return sum(nombre_fills), avg(nombre_fills), NumLlars
+return sum(nombre_fills) as total_fills, NumLlars as num_llars, avg(nombre_fills) as mitja
+match (h:HABITATGE)<-[:VIU]-(p:PERSONA)-[r:FAMILIA]->(q:PERSONA)
+where (r.Relacio_Harmonitzada = "fill" or r.Relacio_Harmonitzada = "filla") and p.Any = 1881 and h.Municipi = "SFLL"
+with p as persones, count(distinct q) as nombre_fills
+return sum(nombre_fills), avg(nombre_fills)
+
+VERSIÓ 2 (IGUAL AL JOC DE PROVES, PERO CREC QUE NO ESTÀ BÉ)
+call{
+    match (l:HABITATGE)
+    where l.Municipi='SFLL' and l.Any_Padro=1881
+    return count(l.Id_Llar) as NumLlars
+}
+match (h:HABITATGE)<-[:VIU]-(p:PERSONA)-[r:FAMILIA]->(q:PERSONA)
+where (r.Relacio_Harmonitzada =~ "f.*" and r.Relacio_Harmonitzada <> "familiar") and p.Any = 1881 and h.Municipi = "SFLL"
+with p as persones, count(distinct q) as nombre_fills, NumLlars
+return sum(nombre_fills) as total_fills, NumLlars as num_llars, (sum(nombre_fills)*1.0)/NumLlars as mitja
+
 
 // 10. Per cada any que hi ha a la base de dades, quin és el carrer amb menys habitants de Sant Feliu de Llobregat?
 MATCH (p:PERSONA)-[r:VIU]->(h:HABITATGE {Municipi: 'SFLL'})
