@@ -6,3 +6,15 @@ CALL gds.nodeSimilarity.mutate('graph_3', {
   
   
   CALL gds.graph.project('graph_2', ['PERSONA'], 'SAME_AS')
+  CALL gds.graph.streamRelationshipProperty(
+  'graph_2',                  
+  'score'                                   
+)
+YIELD
+  sourceNodeId, targetNodeId, relationshipType, propertyValue
+RETURN
+  gds.util.asNode(sourceNodeId).Nom as source, gds.util.asNode(targetNodeId).Nom as target, relationshipType, propertyValue
+ORDER BY source ASC, target ASC
+
+
+https://neo4j.com/docs/graph-data-science/current/graph-catalog-relationship-ops/
