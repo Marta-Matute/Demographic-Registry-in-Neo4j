@@ -28,14 +28,11 @@ return h1.Carrer as Carrer, h1.Numero as Numero, count(distinct h2) as Total, co
 order by Total desc limit 10
 
 // 8. Mostreu les famílies de Castellví de Rosanes amb més de 3 fills. Mostreu el nom i cognoms del cap de família i el nombre de fills. Ordeneu-les pel nombre de fills fins a un límit de 20, de més a menys. 
-match (p:PERSONA)-[r:FAMILIA]->(q:PERSONA)
-where (r.Relacio_Harmonitzada = "fill" or r.Relacio_Harmonitzada = "filla")
-with p as persona, count(DISTINCT q) as Nombre_fills, collect(p) as nodes
-set persona.Numero_fills = Nombre_fills
-
-match (h:HABITATGE)-[:VIU]-(p:PERSONA)-[r:FAMILIA]-(p:PERSONA)
-where h.Municipi = "CR" and r.Relacio_Harmonitzada = "jefe" and p.Numero_fills > 3
-return p.Nom as nom, p.Cognom as `1er Cognom`, p.Segon_Cognom as `2n Cognom`, p.Numero_fills as total
+match (h:HABITATGE)-[:VIU]-(p:PERSONA)-[r:FAMILIA]->(q:PERSONA) 
+where r.Relacio_Harmonitzada =~ "f.*" and r.Relacio_Harmonitzada <> "familiar" and h.Municipi = "CR"
+with count(distinct q) as total, p.Nom as nom, p.Cognom as `1er cognom`, p.Segon_Cognom as `2n Cognom`
+where total>3
+return nom, `1er cognom`,`2n Cognom`, total
 order by total desc
 limit 20
 
