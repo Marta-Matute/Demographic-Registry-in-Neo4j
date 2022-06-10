@@ -1,2 +1,8 @@
 //a) Estudi de les components connexes (cc) i de l’estructura de les component en funció de la seva mida.
 CALL gds.graph.project('graph_3', ['PERSONA', 'HABITATGE'], 'VIU')
+CALL gds.nodeSimilarity.mutate('graph_3', {   
+  mutateRelationshipType: 'SIMILAR',                        
+  mutateProperty: 'score'})
+  
+  
+  CALL gds.graph.project('graph_2', ['PERSONA'], 'SAME_AS')
