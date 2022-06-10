@@ -13,6 +13,8 @@ match (p:PERSONA)-[:VIU]->(h:HABITATGE)<-[:VIU]-(q:PERSONA) where p.Nom = "rafel
 // 4. Retorna totes les aparicions de "Miguel ballester". Fes servir la relació SAME_AS per poder retornar totes les instancies, independentment de si hi ha variacions lèxiques (ex. diferents formes d'escriure el seu nom/cognoms). Mostra la informació en forma de subgraf.
 match (p:PERSONA)-[:SAME_AS]-(q:PERSONA) where p.Nom = "miguel" and p.Cognom = "ballester" return p,q
 
+(CALL gds.graph.create.cypher)
+
 // 5. Mostra totes les persones relacionades amb "antonio farran". Mostra la informació en forma de taula: el nom, cognom1, cognom2, i tipus de relació.
 match (p:PERSONA)-[rel]-(q:PERSONA) where p.Nom = "antonio" and p.Cognom = "farran" return q.Nom as Nom, q.Cognom as Cognom1, q.Segon_Cognom as Cognom2, type(rel) as Tipus
 
@@ -27,8 +29,10 @@ order by Total desc limit 10
 
 // 8. Mostreu les famílies de Castellví de Rosanes amb més de 3 fills. Mostreu el nom i cognoms del cap de família i el nombre de fills. Ordeneu-les pel nombre de fills fins a un límit de 20, de més a menys. 
 match (p:PERSONA)-[r:FAMILIA]->(q:PERSONA) 
-where r.Relacio = "fill" or r.Relacio = "filla"
-return p.Nom as nom, p.Cognom as `1er cognom`, p.Segon_Cognom as `2n Cognom`, count(q) as total
+where r.Relacio = 'fill' or r.Relacio = 'filla' 
+with count(q) as total, p.Nom as nom, p.Cognom as `1er cognom`, p.Segon_Cognom as `2n Cognom`
+where total>3
+return nom, `1er cognom`,`2n Cognom`, total
 order by total desc
 limit 20
 
@@ -67,7 +71,7 @@ QUERY 10
 // coses que falten: 
 // de la query 4 falta mostrar la informació en forma de subgraf
 // de la query 7 no dona com al joc de proves, pero a mes grups els hi dona així, és a dir que podria ser que estigui bé
-// de la query 8 falta posar la condició de que la familia tingui més de 3 fills
+// de la query 8 no surt el resultat com el joc de proves
 // de la query 9 falta retornar "el nombre d'habitatges", que sincerament, no sé a que es refereix
 // també de la query 9, el tema que al joc de proves surti que la mitja de fills es 217........
 
