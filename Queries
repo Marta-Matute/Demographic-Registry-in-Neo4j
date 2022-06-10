@@ -62,8 +62,14 @@ where (r.Relacio_Harmonitzada = "fill" or r.Relacio_Harmonitzada = "filla") and 
 with p as persones, count(distinct q) as nombre_fills, NumLlars
 return sum(nombre_fills), avg(nombre_fills), NumLlars
 
-QUERY 10
-
+// 10. Per cada any que hi ha a la base de dades, quin és el carrer amb menys habitants de Sant Feliu de Llobregat?
+MATCH (p:PERSONA)-[r:VIU]->(h:HABITATGE {Municipi: 'SFLL'})
+WITH COLLECT(r.Any) AS an, p, h
+UNWIND h.Carrer as st
+WITH count(p) as per, an, st
+ORDER BY per
+RETURN an, COLLECT(st)[0], min(per)
+ORDER BY an
 
 
 
@@ -74,7 +80,7 @@ QUERY 10
 // de la query 8 no surt el resultat com el joc de proves
 // de la query 9 falta retornar "el nombre d'habitatges", que sincerament, no sé a que es refereix
 // també de la query 9, el tema que al joc de proves surti que la mitja de fills es 217........
-
+//query 10 no surt igual solucions
 
 // mentre feia la query 9 vaig fer una comanda que al final no serveix per res, pero que basicament guarda el nombre de fills per familia en forma de propietat.
 ========== set nombre de fills ==========
