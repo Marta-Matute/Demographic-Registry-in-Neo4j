@@ -16,6 +16,10 @@ MERGE (p:PERSONA {Id: toInteger(row.IND)})
 MERGE (h:HABITATGE {Municipi: row.Location, Any_Padro: toInteger(row.Year), Id_Llar: toInteger(row.HOUSE_ID)})
 MERGE (p)-[:VIU]->(h);
 
+//canvi judit:
+MERGE (h:HABITATGE {Municipi: row.Location, Id_Llar: toInteger(row.HOUSE_ID)})
+MERGE (p)-[:VIU {Any: toInteger(row.Year)}]->(h);
+
 // Creem la relació SAME_AS entre les diferents persones
 LOAD CSV WITH HEADERS FROM 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTgC8TBmdXhjUOPKJxyiZSpetPYjaRC34gmxHj6H2AWvXTGbg7MLKVdJnwuh5bIeer7WLUi0OigI6wc/pub?output=csv' AS row
 MERGE (p:PERSONA {Id: toInteger(row.Id_A)})
