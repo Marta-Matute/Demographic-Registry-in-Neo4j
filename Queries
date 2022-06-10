@@ -11,7 +11,7 @@ order by h.Any_Padro
 match (p:PERSONA)-[:VIU]->(h:HABITATGE)<-[:VIU]-(q:PERSONA) where p.Nom = "rafel" and p.Cognom = "marti" return p.Nom as nom, collect(q.Nom) as convivents 
 
 // 4. Retorna totes les aparicions de "Miguel ballester". Fes servir la relació SAME_AS per poder retornar totes les instancies, independentment de si hi ha variacions lèxiques (ex. diferents formes d'escriure el seu nom/cognoms). Mostra la informació en forma de subgraf.
-match (p:PERSONA)-[:SAME_AS]-(q:PERSONA) where p.Nom = "miguel" and p.Cognom = "ballester" return p,q
+match (p:PERSONA)-[:SAME_AS]-(q:PERSONA) where p.Nom = "miguel" and p.Cognom = "ballester" return p,q;
 
 (CALL gds.graph.create.cypher)
 
