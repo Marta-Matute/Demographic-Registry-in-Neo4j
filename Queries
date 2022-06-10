@@ -37,18 +37,6 @@ order by total desc
 limit 20
 
 // 9. Mitja de fills a Sant Feliu del Llobregat l’any 1881 per família. Mostreu el total de fills, el nombre d’habitatges i la mitja.
-VERSIÓ 1 (DIFERENT DEL JOC DE PROVES)
-call{
-    match (l:HABITATGE)
-    where l.Municipi='SFLL' and l.Any_Padro=1881
-    return count(l.Id_Llar) as NumLlars
-}
-match (h:HABITATGE)<-[:VIU]-(p:PERSONA)-[r:FAMILIA]->(q:PERSONA)
-where (r.Relacio_Harmonitzada =~ "f.*" and r.Relacio_Harmonitzada <> "familiar") and p.Any = 1881 and h.Municipi = "SFLL"
-with p as persones, count(distinct q) as nombre_fills, NumLlars
-return sum(nombre_fills) as total_fills, NumLlars as num_llars, avg(nombre_fills) as mitja
-
-VERSIÓ 2 (IGUAL AL JOC DE PROVES, PERO CREC QUE NO ESTÀ BÉ)
 call{
     match (l:HABITATGE)
     where l.Municipi='SFLL' and l.Any_Padro=1881
