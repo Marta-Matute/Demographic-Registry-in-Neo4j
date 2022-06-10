@@ -34,3 +34,16 @@ Let's firstly have a look at the graph's structure, once created. We will have t
   - "Relacio" (relationship): Indicates the type of relationship between the two nodes (son, daughter, spouse, etc.)
   - "Relacio_Harmonitzada" (harmonized relationship): The same as "Relacio" but always in catalan. 
 
+## Queries (Exercice 2)
+The queries that will be answered once the data is correctly loaded are:
+1. From the registry of 1866 from Castellví de Rosanes (CR), return the population number and the list of names. Remove duplicates and NaN.
+2. From the reguistry of Sant Feliu de Llobregat (SFLL) from before the year 1840 (not included), return the population number, the year of the regustry and teh list of home id's of each registry. Order the results by the registry year. 
+3. Return the name of the people who lives int he same house as "rafel marti" (no second last name) according to the registry of 1838 of Sant Feliu de Lobregat (SFLL). Return the information as a graph and as a list. 
+4. Return all the apparitions of "Miguel Ballester". Use the relationship SAME_AS to be able to return all the isntances, independent of the lexical variations. Show the information as a subgraph. 
+5. Show all the poeple related to "antonio farran". Show the information as a table: the name, first last name, second last name, and relationship type. 
+6. List all the familial relationships that there are. 
+7. Identify the nodes htat represent the same home (street and door number) thoroughout the years in Sant Feliu de Llobregat (SFLL). Show the results of the homes that have both the street and door number, the total number of homes, the list of resgistry years and the list of home id's. Order the results in descending order by the total number of houses and how the first 10. 
+8. Show the families of Castellví de Rosanes with more than 3 children. Show the name and both last names of the head of the family and the number of kids. Order by the number of children until a limit of 20, in descending order. 
+9. Average amount of children in Sant Feliu de Llobregat (SFLL) in the year 1881 per family. Show the total number of children, the number of homes and the average.
+10. For each year in the database, what's the street with the lowest population in Sant Feliu de Llobregat (SFLL)?
+
