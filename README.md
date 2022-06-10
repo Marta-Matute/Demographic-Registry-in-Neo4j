@@ -47,3 +47,8 @@ The queries that will be answered once the data is correctly loaded are:
 9. Average amount of children in Sant Feliu de Llobregat (SFLL) in the year 1881 per family. Show the total number of children, the number of homes and the average.
 10. For each year in the database, what's the street with the lowest population in Sant Feliu de Llobregat (SFLL)?
 
+
+## Graph Analysis (Exercice 3)
+The following are some general topics that will be explored in the last exercice. This are guideline and not strict searches:
+1. Study of the connected components (cc) (grouping by the size of the cc, distribution of each type of node depending on the size of the cc...)
+2. Node similiarity in order to create the relationship SAME_AS between those whom we consider to be the same. 
