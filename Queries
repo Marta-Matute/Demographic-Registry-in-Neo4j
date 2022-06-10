@@ -16,7 +16,7 @@ match (p:PERSONA)-[:SAME_AS]-(q:PERSONA) where p.Nom = "miguel" and p.Cognom = "
 (CALL gds.graph.create.cypher)
 
 // 5. Mostra totes les persones relacionades amb "antonio farran". Mostra la informació en forma de taula: el nom, cognom1, cognom2, i tipus de relació.
-match (p:PERSONA)-[rel]-(q:PERSONA) where p.Nom = "antonio" and p.Cognom = "farran" return q.Nom as Nom, q.Cognom as Cognom1, q.Segon_Cognom as Cognom2, type(rel) as Tipus
+match (p:PERSONA)-[rel]-(q:PERSONA) where p.Nom = "antonio" and p.Cognom = "farran" return q.Nom as Nom, q.Cognom as Cognom1, q.Segon_Cognom as Cognom2, type(rel) as Tipus;
 
 // 6. Llisteu totes les relacions familiars que hi ha.
 match (p:PERSONA)-[r:FAMILIA]-(q:PERSONA) where r.Relacio_Harmonitzada <> 'null' return collect(distinct r.Relacio_Harmonitzada)
