@@ -1,15 +1,6 @@
 # Neo4j Project: Demographic Registry
 Neo4j is a graph database management system with libraries that contain many graph algotithm. This is particularly useful to analyse any given database and draw conclusions from it. This repository is made up of all the files used and created for a University Project on Non-Relational Databases. In particular it explores the different types of queries that can be made, as well as some data analysis on the graph using [GDS](https://neo4j.com/docs/graph-data-science/current/algorithms/). More on the specific questions asked later.
 
-[Cèlia Martínez, NIU: 1569504, Github user: celia-m15](https://github.com/celia-m15)
-
-[Marta Matute, NIU 1496672, Github user: Marta-Matute](https://github.com/Marta-Matute)
-
-[Goretti Peña, NIU: 1566866, Github user: gorettipena](https://github.com/gorettipena)
-
-[Judit Ugas, NIU: 1569163, Github user: Juditu](https://github.com/Juditu)
-
-
 ## Introduction
 The context of this project is based on the existing and ongoing research [XARXES](http://dag.cvc.uab.es/xarxes/) by the Computer Vision Center at Universitat Autònoma de Barcelona. We will be using the same data as them, given to us in the form of .csv files, that we will firstly convert into Neo4j graphs. The second exercice will be to answer ten queries, to check that the graph and its properties are properly built. Finally, the last exercice will focus on the use of GDS to analyse and better understand the structure of our data.
 
@@ -52,3 +43,9 @@ The queries that will be answered once the data is correctly loaded are:
 The following are some general topics that will be explored in the last exercice. This are guideline and not strict searches:
 1. Study of the connected components (cc) (grouping by the size of the cc, distribution of each type of node depending on the size of the cc...)
 2. Node similiarity in order to create the relationship SAME_AS between those whom we consider to be the same. 
+
+## Members of the team
+- [Cèlia Martínez, NIU: 1569504, Github user: celia-m15](https://github.com/celia-m15)
+- [Marta Matute, NIU 1496672, Github user: Marta-Matute](https://github.com/Marta-Matute)
+- [Goretti Peña, NIU: 1566866, Github user: gorettipena](https://github.com/gorettipena)
+- [Judit Ugas, NIU: 1569163, Github user: Juditu](https://github.com/Juditu)
