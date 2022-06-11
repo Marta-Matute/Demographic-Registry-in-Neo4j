@@ -3,6 +3,8 @@
 //Es calcula la similaritat basant-se en la mètrica Jaccard
 
 //Mirem la similaritat entre les persones depenent d'on viuen, per saber
+
+(RESULTAT POC INTERESSANT)
 CALL gds.graph.project('graph_3', ['PERSON', 'HOUSE'], 'LIVES')
 CALL gds.nodeSimilarity.mutate('graph_3', {   
   mutateRelationshipType: 'SIMILAR',                        
