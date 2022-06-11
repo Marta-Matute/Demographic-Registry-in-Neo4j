@@ -13,10 +13,6 @@ CREATE (:HABITATGE {Municipi: row.Municipi, Id_Llar: toInteger(row.Id_Llar), Any
 // Creem la relació VIU entre les persones i l'habitatge
 LOAD CSV WITH HEADERS FROM 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRM4DPeqFmv7w6kLH5msNk6_Hdh1wuExRirgysZKO_Q70L21MKBkDISIyjvdm8shVixl5Tcw_5zCfdg/pub?output=csv' AS row
 MERGE (p:PERSONA {Id: toInteger(row.IND)})
-MERGE (h:HABITATGE {Municipi: row.Location, Any_Padro: toInteger(row.Year), Id_Llar: toInteger(row.HOUSE_ID)})
-MERGE (p)-[:VIU]->(h);
-
-//canvi judit:
 MERGE (h:HABITATGE {Municipi: row.Location, Id_Llar: toInteger(row.HOUSE_ID)})
 MERGE (p)-[:VIU {Any: toInteger(row.Year)}]->(h);
 
