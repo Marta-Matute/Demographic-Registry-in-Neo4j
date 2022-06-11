@@ -1,0 +1,55 @@
+// 1
+match (h:HOUSE)<-[:LIVES]-(p:PERSON) where p.Last_Name <> 'nan' and h.Registry_Year = 1866 and h.Municipality = "CR" return count(p) as `Num habitants`, collect(distinct p.Last_Name) as Llistat
+
+// 2
+match (h:HOUSE)<-[:LIVES]-(p:PERSON) 
+where h.Registry_Year < 1840 and h.Municipality = "SFLL"
+return distinct h.Registry_Year as `Any`, collect(DISTINCT h.Home_Id) as `Llista llars`
+order by h.Registry_Year
+
+// 3
+match (p:PERSON)-[:LIVES]->(h:HOUSE)<-[:LIVES]-(q:PERSON) where p.Name = "rafel" and p.Last_Name = "marti" return p.Name as nom, collect(q.Name) as convivents 
+
+// 4
+match (p:PERSON)-[:SAME_AS]-(q:PERSON) where p.Name = "miguel" and p.Last_Name = "ballester" return p,q;
+
+// 5
+match (p:PERSON)-[rel]-(q:PERSON) where p.Name = "antonio" and p.Last_Name = "farran" return q.Name as Nom, q.Last_Name as Cognom1, q.Second_Last_Name  as Cognom2, type(rel) as Tipus;
+
+// 6
+match (p:PERSON)-[r:FAMILY]-(q:PERSON) where r.Harmonized_Relation <> 'null' return collect(distinct r.Harmonized_Relation);
+
+// 7
+match (h1:HOUSE) match (h2:HOUSE)
+where h1.Street = h2.Street and h1.Number = h2.Number and h1.Home_Id <> h2.Home_Id and h1.Municipality = "SFLL" and h2.Municipality = "SFLL" 
+return h1.Street as Carrer, h1.Number as Numero, count(distinct h2) as Total, collect(distinct h2.Registry_Year) as any, collect(DISTINCT h2.Home_Id) as Ids
+order by Total desc limit 10
+
+// 8 
+match (h:HOUSE)-[:LIVES]-(p:PERSON)-[r:FAMILY]->(q:PERSON) 
+where r.Harmonized_Relation =~ "f.*" and r.Harmonized_Relation <> "familiar" and h.Municipality = "CR"
+with count(distinct q) as total, p.Name as nom, p.Last_Name as `1er cognom`, p.Second_Last_Name as `2n Cognom`
+where total>3
+return nom, `1er cognom`,`2n Cognom`, total
+order by total desc
+limit 20
+
+// 9 
+call{
+    match (l:HOUSE)
+    where l.Municipality='SFLL' and l.Registry_Year=1881
+    return count(l.Home_Id) as NumLlars
+}
+match (h:HOUSE)<-[:LIVES]-(p:PERSON)-[r:FAMILY]->(q:PERSON)
+where (r.Harmonized_Relation =~ "f.*" and r.Harmonized_Relation <> "familiar") and p.Year = 1881 and h.Municipality = "SFLL"
+with p as persones, count(distinct q) as nombre_fills, NumLlars
+return sum(nombre_fills) as total_fills, NumLlars as num_llars, (sum(nombre_fills)*1.0)/NumLlars as mitja;
+
+// 10
+MATCH (p:PERSON)-[r:LIVES]->(h:HOUSE {Municipality: 'SFLL'})
+WITH COLLECT(r.Year) AS year, p, h
+UNWIND h.Street as st
+WITH count(p) as per, year, st
+ORDER BY per
+RETURN year, COLLECT(st)[0], min(per)
+ORDER BY year
