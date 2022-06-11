@@ -10,6 +10,14 @@ CREATE (p:PERSONA {Id: toInteger(row.Id), Any: toInteger(row.Year), Nom: row.nam
 LOAD CSV WITH HEADERS FROM 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT0ZhR6BSO_M72JEmxXKs6GLuOwxm_Oy-0UruLJeX8_R04KAcICuvrwn2OENQhtuvddU5RSJSclHRJf/pub?output=csv' AS row
 CREATE (:HABITATGE {Municipi: row.Municipi, Id_Llar: toInteger(row.Id_Llar), Any_Padro: toInteger(row.Any_Padro), Carrer: row.Carrer, Numero: toInteger(row.Numero)});
 
+// Esborrem tots els indexs que puguin existir
+CALL apoc.schema.assert({},{},true) YIELD label, key
+RETURN *; 
+
+// Creem indexos per a crear les relacions de manera mes rapida
+create index for (p:PERSONA) on (p.Id);
+create index for (h:HABITATGE) on (h.Id_Llar);
+
 // Creem la relació VIU entre les persones i l'habitatge
 LOAD CSV WITH HEADERS FROM 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRM4DPeqFmv7w6kLH5msNk6_Hdh1wuExRirgysZKO_Q70L21MKBkDISIyjvdm8shVixl5Tcw_5zCfdg/pub?output=csv' AS row
 MERGE (p:PERSONA {Id: toInteger(row.IND)})
