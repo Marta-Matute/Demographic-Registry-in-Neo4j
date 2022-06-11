@@ -15,7 +15,10 @@ RETURN *;
 
 // CREATE INDEXES (FOR FASTER DATA CREATION)
 create index for (p:PERSON) on (p.Id);
+create index for (p:PERSON) on (p.Year);
 create index for (h:HOUSE) on (h.Home_Id);
+create index for (h:HOUSE) on (h.Municipality);
+create index for (h:HOUSE) on (h.Registry_Year);
 
 // CREATION OF "LIVES" RELATIONSHIP BETWEEN A PERSON AND A HOUSE
 LOAD CSV WITH HEADERS FROM 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRM4DPeqFmv7w6kLH5msNk6_Hdh1wuExRirgysZKO_Q70L21MKBkDISIyjvdm8shVixl5Tcw_5zCfdg/pub?output=csv' AS row
