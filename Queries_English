@@ -4,8 +4,9 @@ match (h:HOUSE)<-[:LIVES]-(p:PERSON) where p.Last_Name <> 'nan' and h.Registry_Y
 // 2
 match (h:HOUSE)<-[:LIVES]-(p:PERSON) 
 where h.Registry_Year < 1840 and h.Municipality = "SFLL"
-return distinct h.Registry_Year as `Any`, collect(DISTINCT h.Home_Id) as `Llista llars`
-order by h.Registry_Year
+with count(h) as poblacio,h
+return distinct h.Registry_Year as `Any`, count(h) as Població, collect(DISTINCT h.Home_Id) as `Llista llars`
+order by h.Registry_Year 
 
 // 3
 match (p:PERSON)-[:LIVES]->(h:HOUSE)<-[:LIVES]-(q:PERSON) where p.Name = "rafel" and p.Last_Name = "marti" return p.Name as nom, collect(q.Name) as convivents 
