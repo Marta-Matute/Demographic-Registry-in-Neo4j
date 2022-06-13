@@ -1,26 +1,15 @@
 //a) Estudi de les components connexes (cc) i de l’estructura de les component en funció de la seva mida.
-// Amb nodeSimilarity compara un grup de nodes basat amb els nodes que estan connectats. 2 nodes es consideren similars si comparteixen veins.
-//Es calcula la similaritat basant-se en la mètrica Jaccard
 
-//Mirem la similaritat entre les persones depenent d'on viuen, per saber
+- quantes components connexes no estan connectades a cap node de tipus ‘Habitatge’.
+CALL gds.graph.project('Graph1', ['PERSON', 'HOUSE'], 'LIVES');
 
-(RESULTAT POC INTERESSANT)
-CALL gds.graph.project('graph_3', ['PERSON', 'HOUSE'], 'LIVES')
-CALL gds.nodeSimilarity.mutate('graph_3', {   
-  mutateRelationshipType: 'SIMILAR',                        
-  mutateProperty: 'score'})
-  
-  //Amb la següent query es miren les relacions entre persones.
-  CALL gds.graph.project('graph_2', ['PERSON'], 'SAME_AS')
-  CALL gds.graph.streamRelationshipProperty(
-  'graph_2',                  
-  'score'                                   
-)
-YIELD
-  sourceNodeId, targetNodeId, relationshipType, propertyValue
-RETURN
-  gds.util.asNode(sourceNodeId).Nom as source, gds.util.asNode(targetNodeId).Nom as target, relationshipType, propertyValue
-ORDER BY source ASC, target ASC
+CALL gds.wcc.stream('Graph1')
+YIELD componentId, nodeId
+WITH componentId, collect(nodeId) as n1
+WHERE size(n1) = 1
+MATCH (n)
+WHERE id(n) in n1
+RETURN count(n) AS Nodes, collect(n.Name+" "+n.Last_Name) AS Persones;
 
 
 https://neo4j.com/docs/graph-data-science/current/graph-catalog-relationship-ops/
