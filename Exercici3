@@ -1,8 +1,17 @@
 //a) Estudi de les components connexes (cc) i de l’estructura de les component en funció de la seva mida.
 
-- quantes components connexes no estan connectades a cap node de tipus ‘Habitatge’.
 CALL gds.graph.project('Graph1', ['PERSON', 'HOUSE'], 'LIVES');
 
+- Per cada municipi i any el nombre de parelles del tipus: (Individu)—(Habitatge)
+CALL gds.wcc.stream('Graph1')
+YIELD componentId, nodeId 
+WITH gds.util.asNode(nodeId) AS n1, componentId
+WITH componentId, n1
+WHERE n1.Municipality <> 'null'
+RETURN DISTINCT n1.Year, n1.Municipality , max(componentId);
+
+
+- quantes components connexes no estan connectades a cap node de tipus ‘Habitatge’.
 CALL gds.wcc.stream('Graph1')
 YIELD componentId, nodeId
 WITH componentId, collect(nodeId) as n1
@@ -13,3 +22,4 @@ RETURN count(n) AS Nodes, collect(n.Name+" "+n.Last_Name) AS Persones;
 
 
 https://neo4j.com/docs/graph-data-science/current/graph-catalog-relationship-ops/
+
