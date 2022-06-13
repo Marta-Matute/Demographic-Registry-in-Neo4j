@@ -20,6 +20,3 @@ MATCH (n)
 WHERE id(n) in n1
 RETURN count(n) AS Nodes, collect(n.Name+" "+n.Last_Name) AS Persones;
 
-
-https://neo4j.com/docs/graph-data-science/current/graph-catalog-relationship-ops/
-
