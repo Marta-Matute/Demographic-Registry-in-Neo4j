@@ -20,3 +20,22 @@ MATCH (n)
 WHERE id(n) in n1
 RETURN count(n) AS Nodes, collect(n.Name+" "+n.Last_Name) AS Persones;
 
+//(b)Semblança entre els nodes. Ens interessa saber quins nodes són semblants com a pas
+previ a identificar els individus que són el mateix (i unirem amb una aresta de tipus
+SAME_AS). Abans de fer aquest anàlisi:
+
+- Determineu els habitatges que són els mateixos al llarg dels anys. Afegiu una
+aresta amb nom “MATEIX_HAB“ entre aquests habitatges. Per evitar arestes
+duplicades feu que la aresta apunti al habitatge amb any de padró més petit.
+
+MATCH (h1:HOUSE),(h2:HOUSE)
+WHERE h1.Home_Id <> h2.Home_Id AND h1.Number=h2.Number AND h1.Municipality=h2.Municipality AND h1.Street=h2.Street AND h1.Year > h2.Year
+RETURN h2.Number, h1.Number
+
+- Creeu un graf en memòria que inclogui els nodes Individu i Habitatge i les
+relacions VIU, FAMILIA, MATEIX_HAB que acabeu de crear.
+
+CALL gds.graph.project('Ex3_2',['PERSON', 'HOUSE'], ['LIVES', 'FAMILY', 'MATEIX_HAB'])
+
+- Calculeu la similaritat entre els nodes del graf que acabeu de crear, escriviu el
+resultat de nou a la base de dades i interpreteu els resultats obtinguts. 
