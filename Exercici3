@@ -30,7 +30,7 @@ duplicades feu que la aresta apunti al habitatge amb any de padró més petit.
 
 MATCH (h1:HOUSE),(h2:HOUSE)
 WHERE h1.Home_Id <> h2.Home_Id AND h1.Number=h2.Number AND h1.Municipality=h2.Municipality AND h1.Street=h2.Street AND h1.Year > h2.Year
-RETURN h2.Number, h1.Number
+MERGE (h2)-[:MATEIX_HAB]->(h1)
 
 - Creeu un graf en memòria que inclogui els nodes Individu i Habitatge i les
 relacions VIU, FAMILIA, MATEIX_HAB que acabeu de crear.
