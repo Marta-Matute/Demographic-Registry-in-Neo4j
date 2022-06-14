@@ -20,8 +20,8 @@ create index for (h:HABITATGE) on (h.Id_Llar);
 
 // Creem la relació VIU entre les persones i l'habitatge
 LOAD CSV WITH HEADERS FROM 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRM4DPeqFmv7w6kLH5msNk6_Hdh1wuExRirgysZKO_Q70L21MKBkDISIyjvdm8shVixl5Tcw_5zCfdg/pub?output=csv' AS row
-MERGE (p:PERSONA {Id: toInteger(row.IND)})
-MERGE (h:HABITATGE {Municipi: row.Location, Id_Llar: toInteger(row.HOUSE_ID)})
+MERGE (p:PERSONA {Id: toInteger(row.IND), Any: toInteger(row.Year)})
+MERGE (h:HABITATGE {Municipi: row.Location, Id_Llar: toInteger(row.HOUSE_ID), Any_Padro: toInteger(row.Year)})
 MERGE (p)-[:VIU {Any: toInteger(row.Year)}]->(h);
 
 // Creem la relació SAME_AS entre les diferents persones
