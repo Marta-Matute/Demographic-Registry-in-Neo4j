@@ -31,20 +31,13 @@ YIELD nodeId, componentId
 WHERE gds.util.asNode(nodeId).Last_Name <> 'nan'
 RETURN distinct gds.util.asNode(nodeId).Last_Name AS nom, size(collect(distinct componentId)) AS mida
 ORDER BY mida DESC
-LIMIT 10
+LIMIT 10;
 
 
 
 - Per cada municipi i any el nombre de parelles del tipus: (Individu)—(Habitatge)
-CALL gds.wcc.stream('Graph1')
-YIELD componentId, nodeId 
-WITH gds.util.asNode(nodeId) AS n1, componentId
-WITH componentId, n1
-WHERE n1.Municipality <> 'null'
-RETURN DISTINCT n1..Registry_Year, n1.Municipality , max(componentId);
 
-Una altra opció:
-CALL gds.graph.project('Graph','PERSON','LIVES')
+CALL gds.graph.project('Graph','PERSON','LIVES');
 
 CALL gds.wcc.stream('Graph')
 YIELD componentId, nodeId
@@ -53,7 +46,7 @@ ORDER BY mida DESC
 MATCH path=((n)-->(h:HOUSE))
 WHERE id(n) IN nodes
 RETURN h.Municipality As Municipi, h.Registry_Year AS `Any`, size(collect(n.Id)) AS `Nombre de Parelles`
-ORDER BY Municipi,`Any` ASC
+ORDER BY Municipi, Any ASC;
 
 
 - quantes components connexes no estan connectades a cap node de tipus ‘Habitatge’.
