@@ -41,7 +41,7 @@ YIELD componentId, nodeId
 WITH gds.util.asNode(nodeId) AS n1, componentId
 WITH componentId, n1
 WHERE n1.Municipality <> 'null'
-RETURN DISTINCT n1.Year, n1.Municipality , max(componentId);
+RETURN DISTINCT n1..Registry_Year, n1.Municipality , max(componentId);
 
 Una altra opció:
 CALL gds.graph.project('Graph','PERSON','LIVES')
