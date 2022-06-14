@@ -1,43 +1,33 @@
-Apartat a). Estudi de les components connexes (cc) i de l’estructura de les component en funció de la seva mida.
+//Apartat a
 
-
-- Taula agrupant els resultats segons la mida de la cc.
+//Graph amb les famílies
 CALL gds.graph.project('Graph1', ['PERSON', 'HOUSE'], 'LIVES');
-CALL gds.graph.project('Graph2',['HOUSE','PERSON'],['FAMILY','SAME_AS','LIVES']);
 
-CALL gds.wcc.stream('Graph2')
+//Nombre de persones per família nuclear
+CALL gds.wcc.stream('Graph1')
 YIELD componentId, nodeId
-RETURN componentId, size(collect(nodeId)) AS mida, collect(nodeId) AS nodes
+RETURN componentId, size(collect(nodeId)) AS mida, collect(distinct gds.util.asNode(nodeId).Municipality) AS municipi
 ORDER BY mida DESC;
 
-- Distribució de tipus de nodes (Individu o Habitatge) segons la mida de la cc.
-Distribució segons municipi del Habitatge:
+//Graph amb totes les relacions
+CALL gds.graph.project('Graph2',['HOUSE','PERSON'],['FAMILY','SAME_AS','LIVES']);
+
+//Distribució dels nodes segons el municipi del habitatge
 CALL gds.wcc.stream('Graph2')
 YIELD nodeId, componentId
 WHERE gds.util.asNode(nodeId).Municipality is not null
 RETURN distinct gds.util.asNode(nodeId).Municipality AS municipi, size(collect(distinct componentId)) AS mida
-ORDER BY municipi
+ORDER BY municipi;
 
-Per veure quin son els 10 noms amb mes realcions:
+//Distribució dels nodes segons el cognom
 CALL gds.wcc.stream('Graph2')
-YIELD nodeId, componentId
-WHERE gds.util.asNode(nodeId).Name is not null
-RETURN distinct gds.util.asNode(nodeId).Name AS nom, size(collect(distinct componentId)) AS mida
-ORDER BY mida DESC
-LIMIT 10
-
-I els 10 cognoms amb mes relacions:
-CALL gds.wcc.stream('fams')
 YIELD nodeId, componentId
 WHERE gds.util.asNode(nodeId).Last_Name <> 'nan'
 RETURN distinct gds.util.asNode(nodeId).Last_Name AS nom, size(collect(distinct componentId)) AS mida
 ORDER BY mida DESC
 LIMIT 10;
 
-
-
-- Per cada municipi i any el nombre de parelles del tipus: (Individu)—(Habitatge)
-
+//Per cada municipi i any el nombre de parelles del tipus: (Individu)—(Habitatge)
 CALL gds.graph.project('Graph','PERSON','LIVES');
 
 CALL gds.wcc.stream('Graph')
@@ -46,23 +36,12 @@ WITH componentId, collect(nodeId) AS nodes, size(collect(nodeId)) AS mida
 ORDER BY mida DESC
 MATCH path=((n)-->(h:HOUSE))
 WHERE id(n) IN nodes
-RETURN h.Municipality As Municipi, h.Registry_Year AS `Any`, size(collect(n.Id)) AS `Nombre de Parelles`
+RETURN h.Municipality As Municipi, h.Registry_Year AS `Any`, size(collect(n.Id)) AS `Parelles totals`
 ORDER BY `Any`, Municipi ASC;
 
 
-- quantes components connexes no estan connectades a cap node de tipus ‘Habitatge’.
-CALL gds.wcc.stream('Graph1')
-YIELD componentId, nodeId
-WITH componentId, collect(nodeId) as n1
-WHERE size(n1) = 1
-MATCH (n)
-WHERE id(n) in n1
-RETURN count(n) AS Nodes;
-
-Una altra opció:
-CALL gds.graph.project('Graph','PERSON','LIVES')
-
-CALL gds.wcc.stream('prova')
+//Components connexes que no estan connectades a cap node de tipus ‘Habitatge’.
+CALL gds.wcc.stream('Graph2')
 YIELD componentId, nodeId
 WITH componentId, collect(nodeId) AS nodes
 MATCH (n)
@@ -70,9 +49,7 @@ WHERE (NOT (n)-->(:HOUSE)) AND (id(n) IN nodes)
 RETURN count(DISTINCT componentId) AS NumComponents
 
 
-Apartat b). Semblança entre els nodes. Ens interessa saber quins nodes són semblants com a pas
-previ a identificar els individus que són el mateix (i unirem amb una aresta de tipus
-SAME_AS). Abans de fer aquest anàlisi:
+//Apartat b
 
 - Determineu els habitatges que són els mateixos al llarg dels anys. Afegiu una
 aresta amb nom “MATEIX_HAB“ entre aquests habitatges. Per evitar arestes
