@@ -52,10 +52,9 @@ aresta amb nom “MATEIX_HAB“ entre aquests habitatges. Per evitar arestes
 duplicades feu que la aresta apunti al habitatge amb any de padró més petit.
 
 MATCH (h1:HOUSE),(h2:HOUSE)
-WHERE h1.Home_Id <> h2.Home_Id AND h1.Number=h2.Number AND h1.Municipality=h2.Municipality AND h1.Street=h2.Street AND h1.Year > h2.Year
+WHERE h1.Home_Id <> h2.Home_Id AND h1.Number=h2.Number AND h1.Municipality=h2.Municipality AND h1.Street=h2.Street AND h1.Registry_Year > h2.Registry_Year
 MERGE (h2)-[:MATEIX_HAB]->(h1)
-
-//Hi ha un problema amb year, a mi em surt que es null!
+RETURN h1.Home_Id, h1.Number, h1.Municipality, h1.Street, h1.Registry_Year, h2.Home_Id, h2.Number, h2.Municipality, h2.Street, h2.Registry_Year
 
 
 - Creeu un graf en memòria que inclogui els nodes Individu i Habitatge i les
