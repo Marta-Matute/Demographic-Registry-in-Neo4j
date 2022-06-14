@@ -17,11 +17,19 @@ WHERE gds.util.asNode(nodeId).Municipality is not null
 RETURN distinct gds.util.asNode(nodeId).Municipality AS municipi, size(collect(distinct componentId)) AS mida
 ORDER BY municipi
 
-Per veure quin son els 10 noms mes comuns:
+Per veure quin son els 10 noms amb mes realcions:
 CALL gds.wcc.stream('Graph2')
 YIELD nodeId, componentId
 WHERE gds.util.asNode(nodeId).Name is not null
 RETURN distinct gds.util.asNode(nodeId).Name AS nom, size(collect(distinct componentId)) AS mida
+ORDER BY mida DESC
+LIMIT 10
+
+I els 10 cognoms amb mes relacions:
+CALL gds.wcc.stream('fams')
+YIELD nodeId, componentId
+WHERE gds.util.asNode(nodeId).Last_Name <> 'nan'
+RETURN distinct gds.util.asNode(nodeId).Last_Name AS nom, size(collect(distinct componentId)) AS mida
 ORDER BY mida DESC
 LIMIT 10
 
