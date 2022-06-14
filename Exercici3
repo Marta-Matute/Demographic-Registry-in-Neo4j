@@ -10,6 +10,13 @@ RETURN componentId, size(collect(nodeId)) AS mida, collect(nodeId) AS nodes
 ORDER BY mida DESC;
 
 - Distribució de tipus de nodes (Individu o Habitatge) segons la mida de la cc.
+Distribució segons municipi del Habitatge:
+CALL gds.wcc.stream('fams')
+YIELD nodeId, componentId
+WHERE gds.util.asNode(nodeId).Municipality is not null
+RETURN distinct gds.util.asNode(nodeId).Municipality AS municipi, size(collect(distinct componentId)) AS mida
+ORDER BY municipi
+
 
 
 - Per cada municipi i any el nombre de parelles del tipus: (Individu)—(Habitatge)
