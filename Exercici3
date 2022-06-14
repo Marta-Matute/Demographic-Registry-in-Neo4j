@@ -10,6 +10,18 @@ WITH componentId, n1
 WHERE n1.Municipality <> 'null'
 RETURN DISTINCT n1.Year, n1.Municipality , max(componentId);
 
+Una altra opció:
+CALL gds.graph.project('Graph','PERSON','LIVES')
+
+CALL gds.wcc.stream('Graph')
+YIELD componentId, nodeId
+WITH componentId, collect(nodeId) AS nodes, size(collect(nodeId)) AS mida
+ORDER BY mida DESC
+MATCH path=((n)-->(h:HOUSE))
+WHERE id(n) IN nodes
+RETURN h.Municipality As Municipi, h.Registry_Year AS `Any`, size(collect(n.Id)) AS `Nombre de Parelles`
+ORDER BY Municipi,`Any` ASC
+
 
 - quantes components connexes no estan connectades a cap node de tipus ‘Habitatge’.
 CALL gds.wcc.stream('Graph1')
@@ -19,6 +31,17 @@ WHERE size(n1) = 1
 MATCH (n)
 WHERE id(n) in n1
 RETURN count(n) AS Nodes;
+
+Una altra opció:
+CALL gds.graph.project('Graph','PERSON','LIVES')
+
+CALL gds.wcc.stream('prova')
+YIELD componentId, nodeId
+WITH componentId, collect(nodeId) AS nodes
+MATCH (n)
+WHERE (NOT (n)-->(:HOUSE)) AND (id(n) IN nodes)
+RETURN count(DISTINCT componentId) AS NumComponents
+
 
 //(b)Semblança entre els nodes. Ens interessa saber quins nodes són semblants com a pas
 previ a identificar els individus que són el mateix (i unirem amb una aresta de tipus
