@@ -46,7 +46,7 @@ ORDER BY mida DESC
 MATCH path=((n)-->(h:HOUSE))
 WHERE id(n) IN nodes
 RETURN h.Municipality As Municipi, h.Registry_Year AS `Any`, size(collect(n.Id)) AS `Nombre de Parelles`
-ORDER BY Municipi, Any ASC;
+ORDER BY `Any`, Municipi ASC;
 
 
 - quantes components connexes no estan connectades a cap node de tipus ‘Habitatge’.
