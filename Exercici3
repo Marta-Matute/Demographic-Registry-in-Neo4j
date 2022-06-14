@@ -103,10 +103,11 @@ CALL gds.nodeSimilarity.write('Graph3',{
   writeProperty:'score',
   similarityCutoff:0.30
   })
+YIELD nodesCompared, relationshipsWritten
   
 MATCH (p1:PERSON)-[s:SIMILAR]->(p2:PERSON)
 RETURN p1.Name, p2.Name, s.score
 ORDER BY s.score ASC
 
 
-YIELD nodesCompared, relationshipsWritten
+
