@@ -61,7 +61,7 @@ RETURN h1.Home_Id, h1.Number, h1.Municipality, h1.Street, h1.Registry_Year, h2.H
 //Graf amab nodes Individu i Habitatge i relacions VIU, FAMILIA, MATEIX_HAB 
 CALL gds.graph.project('Graph3',['PERSON', 'HOUSE'], ['LIVES', 'FAMILY', 'MATEIX_HAB']);
 
-//Similaritat entre Graf3 
+//Similaritat entre els nodes del Graf3 
 CALL gds.nodeSimilarity.write('Graph3',{
   writeRelationshipType:'SIMILAR',
   writeProperty:'score',
