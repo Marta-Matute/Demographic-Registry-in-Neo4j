@@ -1,6 +1,16 @@
 //a) Estudi de les components connexes (cc) i de l’estructura de les component en funció de la seva mida.
 
 CALL gds.graph.project('Graph1', ['PERSON', 'HOUSE'], 'LIVES');
+- Taula agrupant els resultats segons la mida de la cc.
+CALL gds.graph.project('Graph2',['HOUSE','PERSON'],['FAMILY','SAME_AS','LIVES']);
+
+CALL gds.wcc.stream('Graph2')
+YIELD componentId, nodeId
+RETURN componentId, size(collect(nodeId)) AS mida, collect(nodeId) AS nodes
+ORDER BY mida DESC;
+
+- Distribució de tipus de nodes (Individu o Habitatge) segons la mida de la cc.
+
 
 - Per cada municipi i any el nombre de parelles del tipus: (Individu)—(Habitatge)
 CALL gds.wcc.stream('Graph1')
