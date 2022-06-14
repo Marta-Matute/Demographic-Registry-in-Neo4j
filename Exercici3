@@ -46,30 +46,22 @@ YIELD componentId, nodeId
 WITH componentId, collect(nodeId) AS nodes
 MATCH (n)
 WHERE (NOT (n)-->(:HOUSE)) AND (id(n) IN nodes)
-RETURN count(DISTINCT componentId) AS NumComponents
+RETURN count(DISTINCT componentId) AS NumComponents;
 
 
 //Apartat b
 
-- Determineu els habitatges que són els mateixos al llarg dels anys. Afegiu una
-aresta amb nom “MATEIX_HAB“ entre aquests habitatges. Per evitar arestes
-duplicades feu que la aresta apunti al habitatge amb any de padró més petit.
-
+//Aresta amb nom “MATEIX_HAB“ entre aquests habitatges
 MATCH (h1:HOUSE),(h2:HOUSE)
-WHERE h1.Home_Id <> h2.Home_Id AND h1.Number=h2.Number AND h1.Municipality=h2.Municipality AND h1.Street=h2.Street AND h1.Registry_Year > h2.Registry_Year
+WHERE h1.Home_Id <> h2.Home_Id AND h1.Number=h2.Number AND h1.Municipality=h2.Municipality AND h1.Street=h2.Street AND h1.Registry_Year < h2.Registry_Year
 MERGE (h2)-[:MATEIX_HAB]->(h1)
-RETURN h1.Home_Id, h1.Number, h1.Municipality, h1.Street, h1.Registry_Year, h2.Home_Id, h2.Number, h2.Municipality, h2.Street, h2.Registry_Year
+RETURN h1.Home_Id, h1.Number, h1.Municipality, h1.Street, h1.Registry_Year, h2.Home_Id, h2.Number, h2.Municipality, h2.Street, h2.Registry_Year;
 
 
-- Creeu un graf en memòria que inclogui els nodes Individu i Habitatge i les
-relacions VIU, FAMILIA, MATEIX_HAB que acabeu de crear.
+//Graf amab nodes Individu i Habitatge i relacions VIU, FAMILIA, MATEIX_HAB 
+CALL gds.graph.project('Graph3',['PERSON', 'HOUSE'], ['LIVES', 'FAMILY', 'MATEIX_HAB']);
 
-CALL gds.graph.project('Graph3',['PERSON', 'HOUSE'], ['LIVES', 'FAMILY', 'MATEIX_HAB'])
-
-
-- Calculeu la similaritat entre els nodes del graf que acabeu de crear, escriviu el
-resultat de nou a la base de dades i interpreteu els resultats obtinguts.
-
+//Similaritat entre Graf3 
 CALL gds.nodeSimilarity.write('Graph3',{
   writeRelationshipType:'SIMILAR',
   writeProperty:'score',
@@ -77,6 +69,6 @@ CALL gds.nodeSimilarity.write('Graph3',{
   })
 YIELD nodesCompared, relationshipsWritten
   
-MATCH p=()-[r:SIMILAR]->(:HOUSE) RETURN p
+MATCH p=()-[r:SIMILAR]->(:HOUSE) RETURN p;
 
 
